@@ -31,6 +31,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 12px 0;
+    gap: 20px;
 }
 
 .logo {
@@ -44,6 +45,28 @@ body {
 
 .logo i {
     font-size: 24px;
+}
+
+.nav-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.sidebar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+    background-color: #333;
 }
 
 .nav {
@@ -121,6 +144,50 @@ body {
     height: fit-content;
     position: sticky;
     top: 100px;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #333;
+}
+
+.sidebar-header h2 {
+    color: #ff6b6b;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.sidebar-close {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.sidebar-close:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 199;
 }
 
 .filter-section {
@@ -408,14 +475,45 @@ body {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
+    .sidebar-toggle {
+        display: block;
+    }
+    
     .main .container {
         flex-direction: column;
+        position: relative;
     }
     
     .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        background-color: #1a1a1a;
+        border-radius: 0;
+        padding: 20px;
+        transform: translateX(-100%);
+        z-index: 200;
+        overflow-y: auto;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .sidebar.show {
+        transform: translateX(0);
+    }
+    
+    .sidebar-header {
+        display: flex;
+    }
+    
+    .sidebar-overlay.show {
+        display: block;
+    }
+    
+    .content {
         width: 100%;
-        position: static;
-        margin-bottom: 20px;
+        padding: 0;
     }
     
     .apps-grid {
@@ -425,16 +523,36 @@ body {
 
 @media (max-width: 768px) {
     .header-content {
-        flex-direction: column;
+        flex-wrap: wrap;
         gap: 15px;
+    }
+    
+    .logo {
+        order: 1;
+    }
+    
+    .nav-section {
+        order: 2;
+    }
+    
+    .search-container {
+        order: 3;
+        flex: 1;
+        min-width: 250px;
     }
     
     .nav {
         gap: 20px;
     }
     
+    .nav-link {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+    
     .search-input {
-        width: 250px;
+        width: 100%;
+        min-width: 200px;
     }
     
     .content-header h1 {
@@ -442,11 +560,21 @@ body {
     }
     
     .apps-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+    }
+    
+    .app-card {
+        min-height: auto;
     }
     
     .filter-section {
         margin-bottom: 20px;
+    }
+    
+    .sidebar {
+        width: 100%;
+        max-width: 320px;
     }
 }
 
@@ -455,24 +583,61 @@ body {
         padding: 0 15px;
     }
     
-    .search-input {
-        width: 200px;
+    .header-content {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .logo {
+        align-self: center;
+    }
+    
+    .nav-section {
+        justify-content: center;
     }
     
     .nav {
         gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
     }
     
     .nav-link {
-        padding: 6px 12px;
+        padding: 8px 12px;
         font-size: 14px;
+    }
+    
+    .search-container {
+        width: 100%;
+    }
+    
+    .search-input {
+        width: 100%;
     }
     
     .content-header h1 {
         font-size: 24px;
+        text-align: center;
+    }
+    
+    .content-header p {
+        text-align: center;
+    }
+    
+    .apps-grid {
+        grid-template-columns: 1fr;
     }
     
     .app-info {
         padding: 15px;
+    }
+    
+    .app-card:hover {
+        transform: translateY(-2px);
+    }
+    
+    .sidebar {
+        width: 100%;
+        max-width: 100%;
     }
 }

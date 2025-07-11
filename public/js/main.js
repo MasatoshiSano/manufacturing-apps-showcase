@@ -22,6 +22,9 @@ class ManufacturingAppsShowcase {
     }
 
     bindEvents() {
+        // サイドバー制御
+        this.bindSidebarEvents();
+        
         // 検索
         const searchInput = document.getElementById('searchInput');
         searchInput.addEventListener('input', (e) => {
@@ -44,6 +47,125 @@ class ManufacturingAppsShowcase {
                 this.openAppDetail(appId);
             }
         });
+
+        // タッチ操作の最適化
+        this.bindTouchEvents();
+    }
+
+    bindSidebarEvents() {
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarClose = document.getElementById('sidebarClose');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const sidebar = document.getElementById('sidebar');
+
+        // サイドバーを開く
+        sidebarToggle?.addEventListener('click', () => {
+            this.showSidebar();
+        });
+
+        // サイドバーを閉じる
+        sidebarClose?.addEventListener('click', () => {
+            this.hideSidebar();
+        });
+
+        // オーバーレイクリックで閉じる
+        sidebarOverlay?.addEventListener('click', () => {
+            this.hideSidebar();
+        });
+
+        // ESCキーで閉じる
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sidebar?.classList.contains('show')) {
+                this.hideSidebar();
+            }
+        });
+
+        // リサイズ時の処理
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) {
+                this.hideSidebar();
+            }
+        });
+    }
+
+    bindTouchEvents() {
+        // スワイプジェスチャーでサイドバー制御
+        let startX = 0;
+        let startY = 0;
+        let isSwipeDetected = false;
+
+        document.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            isSwipeDetected = false;
+        }, { passive: true });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!startX || !startY) return;
+
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            const diffX = startX - currentX;
+            const diffY = startY - currentY;
+
+            // 水平スワイプの判定
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                isSwipeDetected = true;
+                
+                // 左端からのスワイプでサイドバーを開く
+                if (startX < 50 && diffX < -100) {
+                    this.showSidebar();
+                }
+                
+                // 右スワイプでサイドバーを閉じる
+                if (diffX < -100 && document.getElementById('sidebar')?.classList.contains('show')) {
+                    this.hideSidebar();
+                }
+            }
+        }, { passive: true });
+
+        document.addEventListener('touchend', () => {
+            startX = 0;
+            startY = 0;
+            isSwipeDetected = false;
+        }, { passive: true });
+
+        // タッチフィードバックの改善
+        document.querySelectorAll('.app-card, .filter-item, .nav-link').forEach(element => {
+            element.addEventListener('touchstart', function() {
+                this.style.opacity = '0.7';
+            }, { passive: true });
+
+            element.addEventListener('touchend', function() {
+                this.style.opacity = '1';
+            }, { passive: true });
+
+            element.addEventListener('touchcancel', function() {
+                this.style.opacity = '1';
+            }, { passive: true });
+        });
+    }
+
+    showSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        if (sidebar && overlay) {
+            sidebar.classList.add('show');
+            overlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    hideSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        if (sidebar && overlay) {
+            sidebar.classList.remove('show');
+            overlay.classList.remove('show');
+            document.body.style.overflow = '';
+        }
     }
 
     async loadData() {
