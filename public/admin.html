@@ -269,6 +269,83 @@
             cursor: pointer;
         }
 
+        .category-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-separator {
+            text-align: center;
+            color: #aaa;
+            font-size: 14px;
+            padding: 5px 0;
+        }
+
+        .tag-selection-group {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .tag-input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .selected-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+            min-height: 32px;
+            padding: 8px;
+            background-color: #0f0f0f;
+            border: 2px solid #333;
+            border-radius: 8px;
+        }
+
+        .selected-tag {
+            background-color: #ff6b6b;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .selected-tag-remove {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .selected-tag-remove:hover {
+            opacity: 1;
+        }
+
+        .form-select[multiple] {
+            background-color: #0f0f0f;
+            border: 2px solid #333;
+        }
+
+        .form-select[multiple] option {
+            padding: 8px;
+            color: #fff;
+            background-color: #0f0f0f;
+        }
+
+        .form-select[multiple] option:checked {
+            background-color: #ff6b6b;
+        }
+
         .loading {
             text-align: center;
             padding: 40px;
@@ -299,6 +376,14 @@
             .modal-content {
                 padding: 20px;
                 width: 95%;
+            }
+
+            .tag-selection-group {
+                grid-template-columns: 1fr;
+            }
+
+            .category-input-group {
+                gap: 8px;
             }
         }
     </style>
@@ -377,7 +462,14 @@
 
                 <div class="form-group">
                     <label for="appCategory" class="form-label">カテゴリ *</label>
-                    <input type="text" id="appCategory" class="form-input" required>
+                    <div class="category-input-group">
+                        <select id="appCategorySelect" class="form-select">
+                            <option value="">既存のカテゴリから選択...</option>
+                        </select>
+                        <span class="input-separator">または</span>
+                        <input type="text" id="appCategoryInput" class="form-input" placeholder="新しいカテゴリを入力...">
+                    </div>
+                    <input type="hidden" id="appCategory" required>
                 </div>
 
                 <div class="form-group">
@@ -387,8 +479,16 @@
 
                 <div class="form-group">
                     <label class="form-label">タグ</label>
-                    <div class="tag-input-container" id="tagContainer"></div>
-                    <input type="text" id="tagInput" class="form-input" placeholder="タグを入力してEnterキーを押してください">
+                    <div class="selected-tags" id="selectedTagsContainer"></div>
+                    <div class="tag-selection-group">
+                        <select id="existingTagsSelect" class="form-select" multiple size="6">
+                            <!-- 既存タグがここに表示されます -->
+                        </select>
+                        <div class="tag-input-section">
+                            <input type="text" id="tagInput" class="form-input" placeholder="新しいタグを入力...">
+                            <button type="button" id="addTagBtn" class="btn btn-secondary btn-sm">追加</button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">

@@ -3,8 +3,10 @@ class AdminPanel {
         this.token = localStorage.getItem('adminToken');
         this.apps = [];
         this.currentEditingApp = null;
-        this.tags = [];
+        this.selectedTags = [];
         this.features = [];
+        this.existingCategories = [];
+        this.existingTags = [];
 
         this.init();
     }
@@ -18,6 +20,7 @@ class AdminPanel {
         await this.checkAuth();
         this.bindEvents();
         await this.loadApps();
+        await this.loadCategoriesAndTags();
     }
 
     async checkAuth() {
@@ -60,12 +63,30 @@ class AdminPanel {
             this.saveApp();
         });
 
+        // カテゴリ選択
+        document.getElementById('appCategorySelect').addEventListener('change', (e) => {
+            this.handleCategorySelect(e.target.value);
+        });
+
+        document.getElementById('appCategoryInput').addEventListener('input', (e) => {
+            this.handleCategoryInput(e.target.value);
+        });
+
+        // タグ選択
+        document.getElementById('existingTagsSelect').addEventListener('change', (e) => {
+            this.handleExistingTagSelect();
+        });
+
         // タグ入力
         document.getElementById('tagInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                this.addTag();
+                this.addNewTag();
             }
+        });
+
+        document.getElementById('addTagBtn').addEventListener('click', () => {
+            this.addNewTag();
         });
 
         // 機能入力
@@ -92,6 +113,47 @@ class AdminPanel {
             console.error('アプリの読み込みに失敗しました:', error);
             this.hideLoading();
         }
+    }
+
+    async loadCategoriesAndTags() {
+        try {
+            const [categoriesResponse, tagsResponse] = await Promise.all([
+                fetch('/api/categories'),
+                fetch('/api/tags')
+            ]);
+            
+            this.existingCategories = await categoriesResponse.json();
+            this.existingTags = await tagsResponse.json();
+            
+            this.renderCategoryOptions();
+            this.renderExistingTags();
+        } catch (error) {
+            console.error('カテゴリとタグの読み込みに失敗しました:', error);
+        }
+    }
+
+    renderCategoryOptions() {
+        const select = document.getElementById('appCategorySelect');
+        select.innerHTML = '<option value="">既存のカテゴリから選択...</option>';
+        
+        this.existingCategories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            select.appendChild(option);
+        });
+    }
+
+    renderExistingTags() {
+        const select = document.getElementById('existingTagsSelect');
+        select.innerHTML = '';
+        
+        this.existingTags.forEach(tag => {
+            const option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag;
+            select.appendChild(option);
+        });
     }
 
     renderAppsTable() {
@@ -126,7 +188,7 @@ class AdminPanel {
 
     openModal(app = null) {
         this.currentEditingApp = app;
-        this.tags = [];
+        this.selectedTags = [];
         this.features = [];
 
         if (app) {
@@ -134,16 +196,19 @@ class AdminPanel {
             document.getElementById('appName').value = app.name;
             document.getElementById('appDescription').value = app.description;
             document.getElementById('appDetailedDescription').value = app.detailedDescription || '';
-            document.getElementById('appCategory').value = app.category;
             document.getElementById('appUrl').value = app.url;
-            this.tags = [...app.tags];
+            this.selectedTags = [...app.tags];
             this.features = [...(app.features || [])];
+            
+            // カテゴリ設定
+            this.setCategory(app.category);
         } else {
             document.getElementById('modalTitle').textContent = '新規アプリ追加';
             document.getElementById('appForm').reset();
+            this.clearCategorySelection();
         }
 
-        this.renderTags();
+        this.renderSelectedTags();
         this.renderFeatures();
         document.getElementById('appModal').classList.add('show');
     }
@@ -153,32 +218,82 @@ class AdminPanel {
         this.currentEditingApp = null;
     }
 
-    addTag() {
+    handleCategorySelect(value) {
+        if (value) {
+            document.getElementById('appCategoryInput').value = '';
+            document.getElementById('appCategory').value = value;
+        }
+    }
+
+    handleCategoryInput(value) {
+        if (value) {
+            document.getElementById('appCategorySelect').value = '';
+            document.getElementById('appCategory').value = value;
+        }
+    }
+
+    setCategory(category) {
+        if (this.existingCategories.includes(category)) {
+            document.getElementById('appCategorySelect').value = category;
+            document.getElementById('appCategoryInput').value = '';
+        } else {
+            document.getElementById('appCategorySelect').value = '';
+            document.getElementById('appCategoryInput').value = category;
+        }
+        document.getElementById('appCategory').value = category;
+    }
+
+    clearCategorySelection() {
+        document.getElementById('appCategorySelect').value = '';
+        document.getElementById('appCategoryInput').value = '';
+        document.getElementById('appCategory').value = '';
+    }
+
+    handleExistingTagSelect() {
+        const select = document.getElementById('existingTagsSelect');
+        const selectedOptions = Array.from(select.selectedOptions);
+        
+        selectedOptions.forEach(option => {
+            const tag = option.value;
+            if (!this.selectedTags.includes(tag)) {
+                this.selectedTags.push(tag);
+            }
+            option.selected = false;
+        });
+        
+        this.renderSelectedTags();
+    }
+
+    addNewTag() {
         const input = document.getElementById('tagInput');
         const tag = input.value.trim();
 
-        if (tag && !this.tags.includes(tag)) {
-            this.tags.push(tag);
-            this.renderTags();
+        if (tag && !this.selectedTags.includes(tag)) {
+            this.selectedTags.push(tag);
+            this.renderSelectedTags();
             input.value = '';
         }
     }
 
-    removeTag(index) {
-        this.tags.splice(index, 1);
-        this.renderTags();
+    removeSelectedTag(index) {
+        this.selectedTags.splice(index, 1);
+        this.renderSelectedTags();
     }
 
-    renderTags() {
-        const container = document.getElementById('tagContainer');
-        container.innerHTML = this.tags.map((tag, index) => `
-            <div class="tag-item">
-                ${tag}
-                <button type="button" class="tag-remove" onclick="adminPanel.removeTag(${index})">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `).join('');
+    renderSelectedTags() {
+        const container = document.getElementById('selectedTagsContainer');
+        if (this.selectedTags.length === 0) {
+            container.innerHTML = '<span style="color: #666; font-style: italic;">タグが選択されていません</span>';
+        } else {
+            container.innerHTML = this.selectedTags.map((tag, index) => `
+                <div class="selected-tag">
+                    ${tag}
+                    <button type="button" class="selected-tag-remove" onclick="adminPanel.removeSelectedTag(${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
     }
 
     addFeature() {
@@ -210,13 +325,19 @@ class AdminPanel {
     }
 
     async saveApp() {
+        const category = document.getElementById('appCategory').value;
+        if (!category) {
+            this.showMessage('カテゴリを選択または入力してください', 'error');
+            return;
+        }
+
         const formData = {
             name: document.getElementById('appName').value,
             description: document.getElementById('appDescription').value,
             detailedDescription: document.getElementById('appDetailedDescription').value,
-            category: document.getElementById('appCategory').value,
+            category: category,
             url: document.getElementById('appUrl').value,
-            tags: this.tags,
+            tags: this.selectedTags,
             features: this.features,
             image: 'default-app.jpg'
         };
@@ -250,6 +371,7 @@ class AdminPanel {
             if (response.ok) {
                 this.closeModal();
                 await this.loadApps();
+                await this.loadCategoriesAndTags();
                 this.showMessage('アプリを保存しました', 'success');
             } else {
                 const error = await response.json();
