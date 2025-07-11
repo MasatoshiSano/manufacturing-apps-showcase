@@ -3,9 +3,17 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// 管理者設定（本番環境では環境変数を使用）
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
+
+// セッション管理（簡易実装）
+const adminSessions = new Set();
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -24,6 +32,48 @@ const loadData = (filename) => {
 const saveData = (filename, data) => {
   fs.writeFileSync(path.join(__dirname, 'data', filename), JSON.stringify(data, null, 2));
 };
+
+// 管理者認証ミドルウェア
+const requireAdmin = (req, res, next) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  
+  if (!token || !adminSessions.has(token)) {
+    return res.status(401).json({ error: '管理者認証が必要です' });
+  }
+  
+  next();
+};
+
+// 管理者ログイン
+app.post('/api/admin/login', (req, res) => {
+  const { username, password } = req.body;
+  
+  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    const token = crypto.randomBytes(32).toString('hex');
+    adminSessions.add(token);
+    
+    // 24時間後にトークンを削除
+    setTimeout(() => {
+      adminSessions.delete(token);
+    }, 24 * 60 * 60 * 1000);
+    
+    res.json({ token, message: 'ログインしました' });
+  } else {
+    res.status(401).json({ error: 'ユーザー名またはパスワードが間違っています' });
+  }
+});
+
+// 管理者ログアウト
+app.post('/api/admin/logout', requireAdmin, (req, res) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  adminSessions.delete(token);
+  res.json({ message: 'ログアウトしました' });
+});
+
+// 管理者認証状態確認
+app.get('/api/admin/check', requireAdmin, (req, res) => {
+  res.json({ authenticated: true });
+});
 
 app.get('/api/apps', (req, res) => {
   const apps = loadData('apps.json');
@@ -110,12 +160,68 @@ app.get('/api/tags', (req, res) => {
   res.json(uniqueTags);
 });
 
+// 管理者用：アプリ作成
+app.post('/api/admin/apps', requireAdmin, (req, res) => {
+  const apps = loadData('apps.json');
+  const newApp = {
+    id: Math.max(...apps.map(app => app.id), 0) + 1,
+    ...req.body,
+    avgRating: 0
+  };
+  
+  apps.push(newApp);
+  saveData('apps.json', apps);
+  res.json(newApp);
+});
+
+// 管理者用：アプリ更新
+app.put('/api/admin/apps/:id', requireAdmin, (req, res) => {
+  const apps = loadData('apps.json');
+  const appIndex = apps.findIndex(app => app.id === parseInt(req.params.id));
+  
+  if (appIndex === -1) {
+    return res.status(404).json({ error: 'アプリが見つかりません' });
+  }
+  
+  apps[appIndex] = { ...apps[appIndex], ...req.body };
+  saveData('apps.json', apps);
+  res.json(apps[appIndex]);
+});
+
+// 管理者用：アプリ削除
+app.delete('/api/admin/apps/:id', requireAdmin, (req, res) => {
+  const apps = loadData('apps.json');
+  const appIndex = apps.findIndex(app => app.id === parseInt(req.params.id));
+  
+  if (appIndex === -1) {
+    return res.status(404).json({ error: 'アプリが見つかりません' });
+  }
+  
+  apps.splice(appIndex, 1);
+  saveData('apps.json', apps);
+  
+  // 関連するレビューも削除
+  const reviews = loadData('reviews.json');
+  const filteredReviews = reviews.filter(review => review.appId !== parseInt(req.params.id));
+  saveData('reviews.json', filteredReviews);
+  
+  res.json({ message: 'アプリを削除しました' });
+});
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.get('/app/:id', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'app-detail.html'));
+});
+
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+app.get('/admin/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin-login.html'));
 });
 
 app.listen(PORT, '0.0.0.0', () => {

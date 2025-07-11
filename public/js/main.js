@@ -19,6 +19,7 @@ class ManufacturingAppsShowcase {
         this.renderFilters();
         this.renderApps();
         this.hideLoading();
+        this.checkAdminAuth();
     }
 
     bindEvents() {
@@ -369,6 +370,30 @@ class ManufacturingAppsShowcase {
     showLoading() {
         const loading = document.getElementById('loading');
         loading.style.display = 'flex';
+    }
+
+    async checkAdminAuth() {
+        const token = localStorage.getItem('adminToken');
+        if (token) {
+            try {
+                const response = await fetch('/api/admin/check', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const adminLink = document.getElementById('adminLink');
+                    if (adminLink) {
+                        adminLink.style.display = 'inline-flex';
+                        adminLink.href = '/admin';
+                        adminLink.innerHTML = '<i class="fas fa-cog"></i> 管理';
+                    }
+                }
+            } catch (error) {
+                console.log('管理者認証なし');
+            }
+        }
     }
 }
 

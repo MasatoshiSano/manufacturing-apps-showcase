@@ -98,6 +98,7 @@ class AppDetailPage {
         // URL
         const appUrl = document.getElementById('appUrl');
         appUrl.href = this.app.url;
+        appUrl.target = '_blank'; // 新しいタブで開く
         
         // 機能
         if (this.app.features) {

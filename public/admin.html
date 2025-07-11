@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理者画面 - Manufacturing Apps Showcase</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .admin-header {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-title {
+            color: #ff6b6b;
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: #ff6b6b;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #e55555;
+        }
+
+        .btn-secondary {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #444;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .apps-section {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            color: #ff6b6b;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .apps-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .apps-table th,
+        .apps-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        .apps-table th {
+            background-color: #2a2a2a;
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+
+        .apps-table td {
+            color: #ddd;
+        }
+
+        .apps-table tr:hover {
+            background-color: #2a2a2a;
+        }
+
+        .app-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            color: #ff6b6b;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            color: #ddd;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            background-color: #0f0f0f;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 12px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .tag-input-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .tag-item {
+            background-color: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .tag-remove {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-item {
+            background-color: #2a2a2a;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feature-remove {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #aaa;
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .admin-actions {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .apps-table {
+                font-size: 12px;
+            }
+
+            .apps-table th,
+            .apps-table td {
+                padding: 8px 4px;
+            }
+
+            .modal-content {
+                padding: 20px;
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1 class="admin-title">管理者画面</h1>
+            <div class="admin-actions">
+                <button class="btn btn-primary" id="addAppBtn">
+                    <i class="fas fa-plus"></i>
+                    新規アプリ追加
+                </button>
+                <a href="/" class="btn btn-secondary">
+                    <i class="fas fa-home"></i>
+                    ホームに戻る
+                </a>
+                <button class="btn btn-secondary" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    ログアウト
+                </button>
+            </div>
+        </div>
+
+        <div class="apps-section">
+            <div class="section-header">
+                <h2 class="section-title">アプリ管理</h2>
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>データを読み込み中...</p>
+            </div>
+
+            <table class="apps-table" id="appsTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>アプリ名</th>
+                        <th>カテゴリ</th>
+                        <th>評価</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="appsTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- アプリ追加/編集モーダル -->
+    <div class="modal" id="appModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">新規アプリ追加</h3>
+                <button class="modal-close" id="modalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="appForm">
+                <div class="form-group">
+                    <label for="appName" class="form-label">アプリ名 *</label>
+                    <input type="text" id="appName" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="appDescription" class="form-label">短い説明 *</label>
+                    <textarea id="appDescription" class="form-textarea" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="appDetailedDescription" class="form-label">詳細説明</label>
+                    <textarea id="appDetailedDescription" class="form-textarea"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="appCategory" class="form-label">カテゴリ *</label>
+                    <input type="text" id="appCategory" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="appUrl" class="form-label">アプリURL *</label>
+                    <input type="url" id="appUrl" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">タグ</label>
+                    <div class="tag-input-container" id="tagContainer"></div>
+                    <input type="text" id="tagInput" class="form-input" placeholder="タグを入力してEnterキーを押してください">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">主な機能</label>
+                    <ul class="features-list" id="featuresList"></ul>
+                    <input type="text" id="featureInput" class="form-input" placeholder="機能を入力してEnterキーを押してください">
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" id="saveAppBtn">
+                        保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/admin.js"></script>
+</body>
+</html>

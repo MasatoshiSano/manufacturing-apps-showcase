@@ -4,7 +4,12 @@
     "name": "品質管理Pro",
     "description": "製造現場での品質データを効率的に管理・分析できるアプリケーション。リアルタイムでの品質監視とレポート生成機能を提供。",
     "category": "品質管理",
-    "tags": ["品質", "監視", "データ分析", "レポート"],
+    "tags": [
+      "品質",
+      "監視",
+      "データ分析",
+      "レポート"
+    ],
     "image": "quality-pro.jpg",
     "url": "https://example.com/quality-pro",
     "avgRating": 4.5,
@@ -17,14 +22,23 @@
       "モバイル対応",
       "多言語サポート"
     ],
-    "screenshots": ["quality-pro-1.jpg", "quality-pro-2.jpg", "quality-pro-3.jpg"]
+    "screenshots": [
+      "quality-pro-1.jpg",
+      "quality-pro-2.jpg",
+      "quality-pro-3.jpg"
+    ]
   },
   {
     "id": 2,
     "name": "生産スケジューラー",
     "description": "生産計画の最適化とスケジュール管理を支援するアプリ。機械の稼働状況や材料の在庫を考慮した効率的なスケジューリングが可能。",
     "category": "生産管理",
-    "tags": ["生産計画", "スケジューリング", "最適化", "効率化"],
+    "tags": [
+      "生産計画",
+      "スケジューリング",
+      "最適化",
+      "効率化"
+    ],
     "image": "production-scheduler.jpg",
     "url": "https://example.com/production-scheduler",
     "avgRating": 4.2,
@@ -37,17 +51,26 @@
       "ガントチャート表示",
       "アラート機能"
     ],
-    "screenshots": ["scheduler-1.jpg", "scheduler-2.jpg", "scheduler-3.jpg"]
+    "screenshots": [
+      "scheduler-1.jpg",
+      "scheduler-2.jpg",
+      "scheduler-3.jpg"
+    ]
   },
   {
     "id": 3,
     "name": "設備保全管理",
     "description": "設備の予防保全とメンテナンススケジュールを管理。IoTセンサーと連携して設備の状態を監視し、故障予測を行う。",
     "category": "保全管理",
-    "tags": ["保全", "IoT", "予防保全", "故障予測"],
+    "tags": [
+      "保全",
+      "IoT",
+      "予防保全",
+      "故障予測"
+    ],
     "image": "maintenance-manager.jpg",
     "url": "https://example.com/maintenance-manager",
-    "avgRating": 4.7,
+    "avgRating": 5,
     "detailedDescription": "設備保全管理は、IoT技術を活用した次世代の設備管理システムです。センサーデータの収集・分析により、設備の故障を事前に予測し、計画的な保全作業を実現します。",
     "features": [
       "IoTセンサー連携",
@@ -57,14 +80,23 @@
       "作業履歴記録",
       "コスト分析"
     ],
-    "screenshots": ["maintenance-1.jpg", "maintenance-2.jpg", "maintenance-3.jpg"]
+    "screenshots": [
+      "maintenance-1.jpg",
+      "maintenance-2.jpg",
+      "maintenance-3.jpg"
+    ]
   },
   {
     "id": 4,
     "name": "在庫最適化システム",
     "description": "製造業の在庫管理を効率化するアプリ。需要予測と在庫最適化アルゴリズムにより、適切な在庫レベルを維持。",
     "category": "在庫管理",
-    "tags": ["在庫", "需要予測", "最適化", "コスト削減"],
+    "tags": [
+      "在庫",
+      "需要予測",
+      "最適化",
+      "コスト削減"
+    ],
     "image": "inventory-optimizer.jpg",
     "url": "https://example.com/inventory-optimizer",
     "avgRating": 4.3,
@@ -77,14 +109,23 @@
       "ABC分析",
       "コスト分析レポート"
     ],
-    "screenshots": ["inventory-1.jpg", "inventory-2.jpg", "inventory-3.jpg"]
+    "screenshots": [
+      "inventory-1.jpg",
+      "inventory-2.jpg",
+      "inventory-3.jpg"
+    ]
   },
   {
     "id": 5,
     "name": "エネルギー監視ダッシュボード",
     "description": "製造設備のエネルギー使用量を可視化・分析するアプリ。省エネ施策の効果測定とコスト削減をサポート。",
     "category": "エネルギー管理",
-    "tags": ["エネルギー", "省エネ", "可視化", "ダッシュボード"],
+    "tags": [
+      "エネルギー",
+      "省エネ",
+      "可視化",
+      "ダッシュボード"
+    ],
     "image": "energy-dashboard.jpg",
     "url": "https://example.com/energy-dashboard",
     "avgRating": 4.1,
@@ -97,14 +138,23 @@
       "環境負荷分析",
       "レポート自動生成"
     ],
-    "screenshots": ["energy-1.jpg", "energy-2.jpg", "energy-3.jpg"]
+    "screenshots": [
+      "energy-1.jpg",
+      "energy-2.jpg",
+      "energy-3.jpg"
+    ]
   },
   {
     "id": 6,
     "name": "安全管理システム",
     "description": "製造現場の安全管理を支援するアプリ。ヒヤリハット報告、安全教育、事故分析機能を統合。",
     "category": "安全管理",
-    "tags": ["安全", "ヒヤリハット", "事故防止", "教育"],
+    "tags": [
+      "安全",
+      "ヒヤリハット",
+      "事故防止",
+      "教育"
+    ],
     "image": "safety-manager.jpg",
     "url": "https://example.com/safety-manager",
     "avgRating": 4.6,
@@ -117,6 +167,10 @@
       "安全パトロール記録",
       "法令遵守チェック"
     ],
-    "screenshots": ["safety-1.jpg", "safety-2.jpg", "safety-3.jpg"]
+    "screenshots": [
+      "safety-1.jpg",
+      "safety-2.jpg",
+      "safety-3.jpg"
+    ]
   }
 ]

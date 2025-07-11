@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理者ログイン - Manufacturing Apps Showcase</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            padding: 20px;
+        }
+
+        .login-card {
+            background-color: #1a1a1a;
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo {
+            color: #ff6b6b;
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .login-title {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            color: #ddd;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            background-color: #0f0f0f;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: #fff;
+            font-size: 16px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+
+        .login-button {
+            width: 100%;
+            background-color: #ff6b6b;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-bottom: 20px;
+        }
+
+        .login-button:hover {
+            background-color: #e55555;
+        }
+
+        .login-button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            background-color: rgba(255, 107, 107, 0.1);
+            border: 1px solid #ff6b6b;
+            border-radius: 8px;
+            padding: 12px;
+            color: #ff6b6b;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .back-link {
+            text-align: center;
+        }
+
+        .back-link a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .back-link a:hover {
+            color: #ff6b6b;
+        }
+
+        .demo-info {
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .demo-info h4 {
+            color: #ff6b6b;
+            margin: 0 0 8px 0;
+            font-size: 14px;
+        }
+
+        .demo-info p {
+            color: #ddd;
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h1 class="login-title">管理者ログイン</h1>
+                <p class="login-subtitle">Manufacturing Apps Showcase</p>
+            </div>
+
+            <div class="demo-info">
+                <h4>デモ用アカウント</h4>
+                <p>ユーザー名: admin<br>パスワード: admin123</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="error-message" id="errorMessage"></div>
+                
+                <div class="form-group">
+                    <label for="username" class="form-label">ユーザー名</label>
+                    <input type="text" id="username" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">パスワード</label>
+                    <input type="password" id="password" class="form-input" required>
+                </div>
+
+                <button type="submit" id="loginButton" class="login-button">
+                    ログイン
+                </button>
+            </form>
+
+            <div class="back-link">
+                <a href="/">← ホームに戻る</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class AdminLogin {
+            constructor() {
+                this.form = document.getElementById('loginForm');
+                this.usernameInput = document.getElementById('username');
+                this.passwordInput = document.getElementById('password');
+                this.loginButton = document.getElementById('loginButton');
+                this.errorMessage = document.getElementById('errorMessage');
+
+                this.bindEvents();
+                this.checkExistingAuth();
+            }
+
+            bindEvents() {
+                this.form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleLogin();
+                });
+            }
+
+            async checkExistingAuth() {
+                const token = localStorage.getItem('adminToken');
+                if (token) {
+                    try {
+                        const response = await fetch('/api/admin/check', {
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+
+                        if (response.ok) {
+                            window.location.href = '/admin';
+                        } else {
+                            localStorage.removeItem('adminToken');
+                        }
+                    } catch (error) {
+                        localStorage.removeItem('adminToken');
+                    }
+                }
+            }
+
+            async handleLogin() {
+                const username = this.usernameInput.value;
+                const password = this.passwordInput.value;
+
+                this.setLoading(true);
+                this.hideError();
+
+                try {
+                    const response = await fetch('/api/admin/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ username, password })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        localStorage.setItem('adminToken', data.token);
+                        window.location.href = '/admin';
+                    } else {
+                        this.showError(data.error || 'ログインに失敗しました');
+                    }
+                } catch (error) {
+                    this.showError('サーバーに接続できません');
+                } finally {
+                    this.setLoading(false);
+                }
+            }
+
+            setLoading(loading) {
+                this.loginButton.disabled = loading;
+                this.loginButton.textContent = loading ? 'ログイン中...' : 'ログイン';
+            }
+
+            showError(message) {
+                this.errorMessage.textContent = message;
+                this.errorMessage.style.display = 'block';
+            }
+
+            hideError() {
+                this.errorMessage.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new AdminLogin();
+        });
+    </script>
+</body>
+</html>
