@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アプリ詳細 - Manufacturing Apps Showcase</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .app-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ff6b6b;
+            text-decoration: none;
+            margin-bottom: 30px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .back-button:hover {
+            background-color: #333;
+        }
+
+        .app-detail-header {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .app-detail-icon {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-detail-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,107,107,0.8), rgba(78,205,196,0.8));
+            z-index: 1;
+        }
+
+        .app-detail-icon i {
+            position: relative;
+            z-index: 2;
+        }
+
+        .app-detail-info h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .app-category-badge {
+            display: inline-block;
+            background-color: #ff6b6b;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .app-rating-large {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stars-large {
+            color: #ffd700;
+            font-size: 20px;
+        }
+
+        .rating-text-large {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .app-description-long {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .app-tags-large {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tag-large {
+            background-color: #333;
+            color: #ddd;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .app-url {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #ff6b6b;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+
+        .app-url:hover {
+            background-color: #e55555;
+        }
+
+        .app-features {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .app-features h2 {
+            color: #ff6b6b;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+        }
+
+        .feature-icon {
+            color: #ff6b6b;
+            font-size: 18px;
+        }
+
+        .feature-text {
+            color: #ddd;
+            font-size: 14px;
+        }
+
+        .reviews-section {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .reviews-header h2 {
+            color: #ff6b6b;
+            font-size: 24px;
+        }
+
+        .add-review-btn {
+            background-color: #ff6b6b;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .add-review-btn:hover {
+            background-color: #e55555;
+        }
+
+        .review-form {
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #ddd;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            background-color: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 12px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+
+        .rating-input {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+        }
+
+        .rating-star {
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .rating-star:hover,
+        .rating-star.active {
+            color: #ffd700;
+        }
+
+        .submit-review-btn {
+            background-color: #ff6b6b;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .submit-review-btn:hover {
+            background-color: #e55555;
+        }
+
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .review-item {
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .review-author {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .review-date {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .review-rating {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .review-comment {
+            color: #ddd;
+            line-height: 1.6;
+        }
+
+        .loading-reviews {
+            text-align: center;
+            padding: 40px;
+            color: #aaa;
+        }
+
+        @media (max-width: 768px) {
+            .app-detail-header {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .app-detail-icon {
+                width: 150px;
+                height: 150px;
+                font-size: 60px;
+                margin: 0 auto;
+            }
+
+            .app-detail-info h1 {
+                font-size: 28px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reviews-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-industry"></i>
+                    <span>Manufacturing Apps</span>
+                </div>
+                <nav class="nav">
+                    <a href="/" class="nav-link">ホーム</a>
+                    <a href="#" class="nav-link">カテゴリ</a>
+                    <a href="#" class="nav-link">人気</a>
+                    <a href="#" class="nav-link">新着</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="app-detail-container">
+            <a href="/" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                <span>一覧に戻る</span>
+            </a>
+
+            <div class="app-detail-header">
+                <div class="app-detail-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <div class="app-detail-info">
+                    <h1 id="appName">アプリ名</h1>
+                    <div class="app-category-badge" id="appCategory">カテゴリ</div>
+                    <div class="app-rating-large">
+                        <div class="stars-large" id="appStars">
+                            <!-- 星がここに表示されます -->
+                        </div>
+                        <span class="rating-text-large" id="appRating">0.0</span>
+                    </div>
+                    <p class="app-description-long" id="appDescription">
+                        アプリの詳細説明がここに表示されます。
+                    </p>
+                    <div class="app-tags-large" id="appTags">
+                        <!-- タグがここに表示されます -->
+                    </div>
+                    <a href="#" class="app-url" id="appUrl">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span>アプリを見る</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="app-features">
+                <h2>主な機能</h2>
+                <div class="features-grid" id="appFeatures">
+                    <!-- 機能がここに表示されます -->
+                </div>
+            </div>
+
+            <div class="reviews-section">
+                <div class="reviews-header">
+                    <h2>レビュー</h2>
+                    <button class="add-review-btn" id="addReviewBtn">レビューを投稿</button>
+                </div>
+
+                <div class="review-form" id="reviewForm">
+                    <div class="form-group">
+                        <label for="reviewerName">お名前</label>
+                        <input type="text" id="reviewerName" placeholder="会社名・お名前を入力してください">
+                    </div>
+                    <div class="form-group">
+                        <label for="reviewRating">評価</label>
+                        <div class="rating-input" id="ratingInput">
+                            <i class="fas fa-star rating-star" data-rating="1"></i>
+                            <i class="fas fa-star rating-star" data-rating="2"></i>
+                            <i class="fas fa-star rating-star" data-rating="3"></i>
+                            <i class="fas fa-star rating-star" data-rating="4"></i>
+                            <i class="fas fa-star rating-star" data-rating="5"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="reviewComment">コメント</label>
+                        <textarea id="reviewComment" rows="4" placeholder="アプリの使用感や改善点をお聞かせください"></textarea>
+                    </div>
+                    <button class="submit-review-btn" id="submitReviewBtn">レビューを投稿</button>
+                </div>
+
+                <div class="reviews-list" id="reviewsList">
+                    <div class="loading-reviews">
+                        <div class="spinner"></div>
+                        <p>レビューを読み込み中...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>製造業アプリ紹介</h4>
+                    <p>製造現場の効率化と品質向上を支援するアプリケーションを紹介するプラットフォームです。</p>
+                </div>
+                <div class="footer-section">
+                    <h4>カテゴリ</h4>
+                    <ul>
+                        <li><a href="#">品質管理</a></li>
+                        <li><a href="#">生産管理</a></li>
+                        <li><a href="#">保全管理</a></li>
+                        <li><a href="#">在庫管理</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>リンク</h4>
+                    <ul>
+                        <li><a href="#">利用規約</a></li>
+                        <li><a href="#">プライバシーポリシー</a></li>
+                        <li><a href="#">お問い合わせ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Manufacturing Apps Showcase. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/detail.js"></script>
+</body>
+</html>

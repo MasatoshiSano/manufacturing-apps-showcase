@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>製造業アプリ紹介 - Manufacturing Apps Showcase</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-industry"></i>
+                    <span>Manufacturing Apps</span>
+                </div>
+                <nav class="nav">
+                    <a href="#" class="nav-link active">ホーム</a>
+                    <a href="#" class="nav-link">カテゴリ</a>
+                    <a href="#" class="nav-link">人気</a>
+                    <a href="#" class="nav-link">新着</a>
+                </nav>
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="アプリを検索..." class="search-input">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="sidebar">
+                <div class="filter-section">
+                    <h3>カテゴリ</h3>
+                    <div class="filter-group" id="categoryFilters">
+                        <label class="filter-item">
+                            <input type="checkbox" value="all" checked>
+                            <span>すべて</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3>タグ</h3>
+                    <div class="filter-group" id="tagFilters">
+                    </div>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="content-header">
+                    <h1>製造業向け便利アプリ</h1>
+                    <p>製造現場の効率化と品質向上を支援するアプリケーションを紹介します</p>
+                </div>
+
+                <div class="apps-grid" id="appsGrid">
+                    <!-- アプリカードがここに動的に追加されます -->
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>読み込み中...</p>
+                </div>
+
+                <div class="no-results" id="noResults" style="display: none;">
+                    <i class="fas fa-search"></i>
+                    <h3>検索結果がありません</h3>
+                    <p>別のキーワードで検索してみてください</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>製造業アプリ紹介</h4>
+                    <p>製造現場の効率化と品質向上を支援するアプリケーションを紹介するプラットフォームです。</p>
+                </div>
+                <div class="footer-section">
+                    <h4>カテゴリ</h4>
+                    <ul>
+                        <li><a href="#">品質管理</a></li>
+                        <li><a href="#">生産管理</a></li>
+                        <li><a href="#">保全管理</a></li>
+                        <li><a href="#">在庫管理</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>リンク</h4>
+                    <ul>
+                        <li><a href="#">利用規約</a></li>
+                        <li><a href="#">プライバシーポリシー</a></li>
+                        <li><a href="#">お問い合わせ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Manufacturing Apps Showcase. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
